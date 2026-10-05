@@ -1,9 +1,9 @@
 {
-  "name": "@template/nextjs",
+  "name": "@playground/layout",
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "dev": "next dev -p 4000",
+    "dev": "next dev -p 4009",
     "build": "next build",
     "start": "next start",
     "clean": "pnpm clean-pkgs && rm -rf node_modules",
