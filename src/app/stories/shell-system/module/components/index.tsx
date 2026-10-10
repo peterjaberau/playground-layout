@@ -19,9 +19,10 @@ function AppShell() {
 
 
   return (
-    <Flexbox direction={"vertical"} height={"100%"} style={{ position: "relative" }} width={"100%"}>
+    <Flexbox data-test-id="shell-root" direction={"vertical"} height={"100%"} style={{ position: "relative" }} width={"100%"}>
       {/* Header */}
       <Flex
+        data-test-id="shell-header"
         direction="row"
         css={{
           justifyContent: "space-between",
@@ -34,17 +35,14 @@ function AppShell() {
       >
         {/* Header - Start */}
         <Flex
+          data-test-id="shell-header-start"
           direction="row"
           css={{
             justifyContent: "center",
             gap: 2,
           }}
         >
-          <Button
-            onClick={expandLeftPanel}
-            size="xs"
-            variant={appShellConfig.leftPanel.isExpanded ? "subtle" : "ghost"}
-          >
+          <Button onClick={expandLeftPanel} size="xs" variant={appShellConfig.leftPanel.isExpanded ? "subtle" : "ghost"}>
             {appShellConfig.leftPanel.isExpanded ? <IconFolderOpen /> : <IconFolder />} Left Expand
           </Button>
           <Button onClick={pinLeftPanel} size="xs" variant={appShellConfig.leftPanel.isPinned ? "subtle" : "ghost"}>
@@ -53,6 +51,7 @@ function AppShell() {
         </Flex>
         {/* Header - center */}
         <Flex
+          data-test-id="shell-header-center"
           direction={"row"}
           css={{
             flex: 1,
@@ -64,11 +63,7 @@ function AppShell() {
             gap: 2,
           }}
         >
-          <Button
-            onClick={expandBottomPanel}
-            size="xs"
-            variant={appShellConfig.bottomPanel.isExpanded ? "subtle" : "ghost"}
-          >
+          <Button onClick={expandBottomPanel} size="xs" variant={appShellConfig.bottomPanel.isExpanded ? "subtle" : "ghost"}>
             {appShellConfig.bottomPanel.isExpanded ? <IconFolderOpen /> : <IconFolder />} Bottom Panel
           </Button>
           <Button onClick={pinBottomPanel} size="xs" variant={appShellConfig.bottomPanel.isPinned ? "subtle" : "ghost"}>
@@ -78,17 +73,14 @@ function AppShell() {
 
         {/* Header - end */}
         <Flex
+          data-test-id="shell-header-end"
           direction={"row"}
           css={{
             justifyContent: "center",
             gap: 2,
           }}
         >
-          <Button
-            onClick={expandRightPanel}
-            size="xs"
-            variant={appShellConfig.rightPanel.isExpanded ? "subtle" : "ghost"}
-          >
+          <Button onClick={expandRightPanel} size="xs" variant={appShellConfig.rightPanel.isExpanded ? "subtle" : "ghost"}>
             {appShellConfig.rightPanel.isExpanded ? <IconFolderOpen /> : <IconFolder />} Right Expand
           </Button>
           <Button onClick={pinRightPanel} size="xs" variant={appShellConfig.rightPanel.isPinned ? "subtle" : "ghost"}>
@@ -99,14 +91,10 @@ function AppShell() {
 
       {/* main */}
 
-      <Flexbox
-        direction="horizontal"
-        width="100%"
-        height="100%"
-        style={{ maxWidth: "100vw", overflow: "hidden", position: "relative" }}
-      >
+      <Flexbox data-test-id="shell-main" direction="horizontal" width="100%" height="100%" style={{ maxWidth: "100vw", overflow: "hidden", position: "relative" }}>
         {/* Left Sidebar */}
         <Flex
+          data-test-id="shell-left-sidebar"
           direction="column"
           css={{
             justifyContent: "space-between",
@@ -119,17 +107,14 @@ function AppShell() {
         >
           {/* Left Sidebar - Start */}
           <Flex
+            data-test-id="shell-left-sidebar-start"
             direction="column"
             css={{
               justifyContent: "center",
               gap: 2,
             }}
           >
-            <IconButton
-              onClick={expandLeftPanel}
-              size="xs"
-              variant={appShellConfig.leftPanel.isExpanded ? "subtle" : "ghost"}
-            >
+            <IconButton onClick={expandLeftPanel} size="xs" variant={appShellConfig.leftPanel.isExpanded ? "subtle" : "ghost"}>
               {appShellConfig.leftPanel.isExpanded ? <IconFolderOpen /> : <IconFolder />}
             </IconButton>
             <IconButton size="xs" variant="ghost" disabled>
@@ -138,6 +123,7 @@ function AppShell() {
           </Flex>
           {/* Left Sidebar - center */}
           <Flex
+            data-test-id="shell-left-sidebar-center"
             direction={"column"}
             css={{
               flex: 1,
@@ -159,6 +145,7 @@ function AppShell() {
 
           {/* Left Sidebar - end */}
           <Flex
+            data-test-id="shell-left-sidebar-end"
             direction={"column"}
             css={{
               justifyContent: "center",
@@ -176,6 +163,7 @@ function AppShell() {
 
         {/* left draggable panel */}
         <DraggablePanel
+          data-test-id="shell-left-sidepanel"
           expand={appShellConfig.leftPanel.isExpanded}
           mode={appShellConfig.leftPanel.isPinned ? "fixed" : "float"}
           css={
@@ -190,27 +178,20 @@ function AppShell() {
         >
           <DraggablePanel.Container style={{ flex: 1 }}>
             <DraggablePanel.Header
+              data-test-id="shell-left-sidepanel-header"
               pin={appShellConfig.leftPanel.isPinned}
               position="left"
               setExpand={expandLeftPanel}
               setPin={pinLeftPanel}
               title="Header Left"
             />
-            <DraggablePanel.Body>
-              DraggablePanel Left DraggablePanel Left DraggablePanel Left DraggablePanel Left DraggablePanel Left{" "}
-            </DraggablePanel.Body>
-            <DraggablePanel.Footer>Footer Left</DraggablePanel.Footer>
+            <DraggablePanel.Body data-test-id="shell-left-sidepanel-body">DraggablePanel Left DraggablePanel Left DraggablePanel Left DraggablePanel Left DraggablePanel Left </DraggablePanel.Body>
+            <DraggablePanel.Footer data-test-id="shell-left-sidepanel-footer">Footer Left</DraggablePanel.Footer>
           </DraggablePanel.Container>
         </DraggablePanel>
 
         {/* content */}
-        <Flexbox
-          flex={1}
-          direction={"vertical"}
-          width={"100%"}
-          height={"100%"}
-          style={{ overflow: "hidden", position: "relative" }}
-        >
+        <Flexbox data-test-id="shell-content" flex={1} direction={"vertical"} width={"100%"} height={"100%"} style={{ overflow: "hidden", position: "relative" }}>
           <Flexbox
             flex={1}
             direction={"vertical"}
@@ -232,18 +213,11 @@ function AppShell() {
             onExpandChange={expandBottomPanel}
           >
             <DraggablePanel.Container style={{ flex: 1 }}>
-              <DraggablePanel.Header
-                pin={appShellConfig.bottomPanel.isPinned}
-                position="right"
-                setExpand={expandBottomPanel}
-                setPin={pinBottomPanel}
-                title="Header Bottom"
-              />
+              <DraggablePanel.Header pin={appShellConfig.bottomPanel.isPinned} position="right" setExpand={expandBottomPanel} setPin={pinBottomPanel} title="Header Bottom" />
               <DraggablePanel.Body>
-                DraggablePanel Bottom DraggablePanel Bottom DraggablePanel Bottom DraggablePanel Bottom DraggablePanel
-                Bottom DraggablePanel Bottom DraggablePanel Bottom DraggablePanel Bottom DraggablePanel Bottom{" "}
-                DraggablePanel Bottom DraggablePanel Bottom DraggablePanel Bottom DraggablePanel Bottom DraggablePanel
-                Bottom DraggablePanel Bottom DraggablePanel Bottom DraggablePanel Bottom{" "}
+                DraggablePanel Bottom DraggablePanel Bottom DraggablePanel Bottom DraggablePanel Bottom DraggablePanel Bottom DraggablePanel Bottom DraggablePanel Bottom DraggablePanel Bottom
+                DraggablePanel Bottom DraggablePanel Bottom DraggablePanel Bottom DraggablePanel Bottom DraggablePanel Bottom DraggablePanel Bottom DraggablePanel Bottom DraggablePanel Bottom
+                DraggablePanel Bottom{" "}
               </DraggablePanel.Body>
               <DraggablePanel.Footer>Footer Bottom</DraggablePanel.Footer>
             </DraggablePanel.Container>
@@ -265,13 +239,7 @@ function AppShell() {
           onExpandChange={expandRightPanel}
         >
           <DraggablePanel.Container style={{ flex: 1 }}>
-            <DraggablePanel.Header
-              pin={appShellConfig.rightPanel.isPinned}
-              position="right"
-              setExpand={expandRightPanel}
-              setPin={pinRightPanel}
-              title="Header Right"
-            />
+            <DraggablePanel.Header pin={appShellConfig.rightPanel.isPinned} position="right" setExpand={expandRightPanel} setPin={pinRightPanel} title="Header Right" />
             <DraggablePanel.Body>DraggablePanel Right</DraggablePanel.Body>
             <DraggablePanel.Footer>Footer Right</DraggablePanel.Footer>
           </DraggablePanel.Container>
@@ -297,11 +265,7 @@ function AppShell() {
               gap: 2,
             }}
           >
-            <IconButton
-              onClick={expandRightPanel}
-              size="xs"
-              variant={appShellConfig.rightPanel.isExpanded ? "subtle" : "ghost"}
-            >
+            <IconButton onClick={expandRightPanel} size="xs" variant={appShellConfig.rightPanel.isExpanded ? "subtle" : "ghost"}>
               {appShellConfig.rightPanel.isExpanded ? <IconFolderOpen /> : <IconFolder />}
             </IconButton>
           </Flex>
@@ -346,6 +310,7 @@ function AppShell() {
 
       {/* Status Bar */}
       <Flex
+        data-test-id="shell-bottom"
         direction="row"
         css={{
           justifyContent: "space-between",

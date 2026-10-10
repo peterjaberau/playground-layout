@@ -25,11 +25,3 @@
 - https://theia-ide.org/
 - https://github.com/eclipse-theia/theia
 
-# Duck UI
-- https://duck-ui.com/
-- https://github.com/caioricciuti/duck-ui
-
-# Loomweaver
-- https://demo.loomweaver.dev/people/employees
-- https://loomweaver.dev/
-- https://github.com/yesbert/loomweaver
