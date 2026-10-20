@@ -1,5 +1,5 @@
 import type { NumberSize, Size } from "re-resizable"
-import type { CSSProperties, HTMLAttributes } from "react"
+import type { HTMLAttributes } from "react"
 import type { Props as RndProps } from "react-rnd"
 import type { ComponentType, ForwardRefExoticComponent, PropsWithoutRef, RefAttributes } from "react"
 
@@ -11,13 +11,11 @@ export interface DraggablePanelProps extends DivProps {
   backgroundColor?: string
   classNames?: {
     content?: string
-    handle?: string
   }
   defaultExpand?: boolean
   defaultSize?: Partial<Size>
   destroyOnClose?: boolean
   expand?: boolean
-  expandable?: boolean
   fullscreen?: boolean
   headerHeight?: number
   maxHeight?: number
@@ -45,17 +43,13 @@ export interface DraggablePanelProps extends DivProps {
    */
   showBorder?: boolean
   showHandleHighlight?: boolean
-  showHandleWideArea?: boolean
   size?: Partial<Size>
-  styles?: {
-    content?: CSSProperties
-    handle?: CSSProperties
-  }
   css?: any
 }
 
 export interface DraggablePanelHeaderProps extends Omit<DivProps, "children"> {
   mode?: "push" | "overlay"
+  panelPlacement?: PlacementType
   position?: "left" | "right"
   setExpand?: (expand: boolean) => void
   setMode?: (mode: "push" | "overlay") => void
@@ -81,10 +75,9 @@ export type DraggablePanelComponent = DraggablePanelParentComponent & {
   Header: DraggablePanelHeaderComponent
 }
 
-export type DraggablePanelAction = { type: "START_RESIZE" } | { type: "STOP_RESIZE" } | { payload: boolean; type: "SET_SHOW_EXPAND" }
+export type DraggablePanelAction = { type: "START_RESIZE" } | { type: "STOP_RESIZE" }
 
 // State reducer for better state management
 export interface DraggablePanelState {
   isResizing: boolean
-  showExpand: boolean
 }

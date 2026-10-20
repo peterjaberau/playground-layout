@@ -1,7 +1,6 @@
 "use client"
 
 import React, { memo, useCallback, useEffect, useMemo, useReducer, useRef, useTransition } from "react"
-import { useHover } from "ahooks"
 import useControlledState from "use-merge-value"
 import isEqual from "fast-deep-equal"
 import { Resizable } from "re-resizable"
@@ -12,20 +11,21 @@ import type { Enable, NumberSize, Size } from "re-resizable"
 import { DraggablePanelProps, DraggablePanelHeaderProps, DraggablePanelState } from "./types"
 
 import { IconButton, chakra, useSlotRecipe } from "@chakra-ui/react"
-import { LuPanelLeft as PanelLeft } from "react-icons/lu"
+import { LuPanelLeft as PanelLeft, LuPanelRight as PanelRight, LuPanelBottom as PanelBottom } from "react-icons/lu"
 import { MdCenterFocusStrong as PushModeIcon, MdOutlineCenterFocusStrong as OverlayModeIcon } from "react-icons/md"
 
 import { draggablePanelRecipe } from "./draggable-panel-recipe"
 
 export const DraggablePanelHeader = memo<DraggablePanelHeaderProps>((props) => {
-  const { mode = "push", setMode, setExpand, title, position = "left", ...rest } = props
+  const { mode = "push", panelPlacement = "left", setMode, setExpand, title, position = "left", ...rest } = props
 
   const recipe = useSlotRecipe({ recipe: draggablePanelRecipe })
   const styles = recipe({ mode, position })
 
+  const PanelIcon = panelPlacement === "right" ? PanelRight : panelPlacement === "bottom" ? PanelBottom : PanelLeft
   const panelIcon = (
     <IconButton size="xs" variant={"ghost"} onClick={() => setExpand?.(false)}>
-      <PanelLeft />
+      <PanelIcon />
     </IconButton>
   )
   const modeIcon = (
@@ -71,7 +71,6 @@ export const DraggablePanel = memo<DraggablePanelProps>(
     children,
     placement = "right",
     resize,
-    style,
     showBorder = true,
     showHandleHighlight = false,
     backgroundColor,
@@ -87,13 +86,10 @@ export const DraggablePanel = memo<DraggablePanelProps>(
     onExpandChange,
     className,
     destroyOnClose,
-    styles: customStyles,
     classNames,
     dir,
     css,
   }) => {
-    const ref = useRef<HTMLDivElement>(null)
-    const isHovering = useHover(ref)
     const isVertical = placement === "top" || placement === "bottom"
     const [isPending, startTransition] = useTransition()
 
@@ -124,10 +120,8 @@ export const DraggablePanel = memo<DraggablePanelProps>(
       fullscreen,
     })
 
-    // Initialize state with useReducer for better performance
     const initialState: DraggablePanelState = {
       isResizing: false,
-      showExpand: true,
     }
 
     const [state, dispatch] = useReducer(draggablePanelReducer, initialState)
@@ -228,7 +222,7 @@ export const DraggablePanel = memo<DraggablePanelProps>(
     }, [])
 
     const handleResizeStop = useCallback(
-      (e: unknown, direction: unknown, reference_: HTMLElement, delta: NumberSize) => {
+      (_event: unknown, _direction: unknown, reference_: HTMLElement, delta: NumberSize) => {
         dispatch({ type: "STOP_RESIZE" })
         onSizeChange?.(delta, {
           height: reference_.style.height,
@@ -306,7 +300,6 @@ export const DraggablePanel = memo<DraggablePanelProps>(
       <chakra.div
         data-part={"draggable-panel-root"}
         dir={dir}
-        ref={ref}
         style={cssVariables}
         className={className}
         css={{

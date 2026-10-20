@@ -19,13 +19,10 @@ export const reversePlacement: any = (placement: DraggablePanelProps["placement"
 export function draggablePanelReducer(state: DraggablePanelState, action: DraggablePanelAction): DraggablePanelState {
   switch (action.type) {
     case "START_RESIZE": {
-      return { ...state, isResizing: true, showExpand: false }
+      return { ...state, isResizing: true }
     }
     case "STOP_RESIZE": {
-      return { ...state, isResizing: false, showExpand: true }
-    }
-    case "SET_SHOW_EXPAND": {
-      return { ...state, showExpand: action.payload }
+      return { ...state, isResizing: false }
     }
     default: {
       return state

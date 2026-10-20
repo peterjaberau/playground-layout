@@ -189,6 +189,7 @@ export function AppShell() {
             <DraggablePanel.Header
               data-test-id="shell-left-sidepanel-header"
               mode={appShellConfig.leftPanel.mode}
+              panelPlacement="left"
               position="left"
               setExpand={setLeftPanelExpanded}
               setMode={toggleLeftPanelMode}
@@ -222,7 +223,14 @@ export function AppShell() {
             onExpandChange={setBottomPanelExpanded}
           >
             <DraggablePanel.Container style={{ flex: 1 }}>
-              <DraggablePanel.Header mode={appShellConfig.bottomPanel.mode} position="right" setExpand={setBottomPanelExpanded} setMode={toggleBottomPanelMode} title="Header Bottom" />
+              <DraggablePanel.Header
+                mode={appShellConfig.bottomPanel.mode}
+                panelPlacement="bottom"
+                position="right"
+                setExpand={setBottomPanelExpanded}
+                setMode={toggleBottomPanelMode}
+                title="Header Bottom"
+              />
               <DraggablePanel.Body>
                 DraggablePanel Bottom DraggablePanel Bottom DraggablePanel Bottom DraggablePanel Bottom DraggablePanel Bottom DraggablePanel Bottom DraggablePanel Bottom DraggablePanel Bottom
                 DraggablePanel Bottom DraggablePanel Bottom DraggablePanel Bottom DraggablePanel Bottom DraggablePanel Bottom DraggablePanel Bottom DraggablePanel Bottom DraggablePanel Bottom
@@ -248,7 +256,14 @@ export function AppShell() {
           onExpandChange={setRightPanelExpanded}
         >
           <DraggablePanel.Container style={{ flex: 1 }}>
-            <DraggablePanel.Header mode={appShellConfig.rightPanel.mode} position="right" setExpand={setRightPanelExpanded} setMode={toggleRightPanelMode} title="Header Right" />
+            <DraggablePanel.Header
+              mode={appShellConfig.rightPanel.mode}
+              panelPlacement="right"
+              position="right"
+              setExpand={setRightPanelExpanded}
+              setMode={toggleRightPanelMode}
+              title="Header Right"
+            />
             <DraggablePanel.Body>DraggablePanel Right</DraggablePanel.Body>
             <DraggablePanel.Footer>Footer Right</DraggablePanel.Footer>
           </DraggablePanel.Container>
