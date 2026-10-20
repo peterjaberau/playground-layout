@@ -12,37 +12,32 @@ import type { Enable, NumberSize, Size } from "re-resizable"
 import { DraggablePanelProps, DraggablePanelHeaderProps, DraggablePanelState } from "./types"
 
 import { IconButton, chakra, useSlotRecipe } from "@chakra-ui/react"
-import { LuPanelLeft as PanelLeft, LuPin as Pin, LuPinOff as PinOff } from "react-icons/lu"
-
+import { LuPanelLeft as PanelLeft } from "react-icons/lu"
+import { MdCenterFocusStrong as PushModeIcon, MdOutlineCenterFocusStrong as OverlayModeIcon } from "react-icons/md"
 
 import { draggablePanelRecipe } from "./draggable-panel-recipe"
 
 export const DraggablePanelHeader = memo<DraggablePanelHeaderProps>((props) => {
-  const { pin, setPin, setExpand, title, position = "left", ...rest } = props
-
-  const [isPinned, setIsPinned] = useControlledState(false, {
-    onChange: setPin,
-    value: pin,
-  } as any)
+  const { mode = "push", setMode, setExpand, title, position = "left", ...rest } = props
 
   const recipe = useSlotRecipe({ recipe: draggablePanelRecipe })
-  const styles = recipe({ pin, position })
+  const styles = recipe({ mode, position })
 
   const panelIcon = (
     <IconButton size="xs" variant={"ghost"} onClick={() => setExpand?.(false)}>
       <PanelLeft />
     </IconButton>
   )
-  const pinIcon = (
-    <IconButton onClick={() => setIsPinned(!isPinned)} size={"xs"} variant={pin ? "subtle" : "ghost"}>
-      {pin ? <Pin /> : <PinOff />}
+  const modeIcon = (
+    <IconButton onClick={() => setMode?.(mode === "push" ? "overlay" : "push")} size={"xs"} variant={mode === "push" ? "subtle" : "ghost"}>
+      {mode === "push" ? <PushModeIcon /> : <OverlayModeIcon />}
     </IconButton>
   )
   return (
     <chakra.div data-part={"draggable-panel-header"} css={styles.header} {...rest}>
-      {position === "left" ? panelIcon : pinIcon}
+      {position === "left" ? panelIcon : modeIcon}
       {title}
-      {position === "left" ? pinIcon : panelIcon}
+      {position === "left" ? modeIcon : panelIcon}
     </chakra.div>
   )
 })
@@ -72,7 +67,7 @@ export const DraggablePanel = memo<DraggablePanelProps>(
     fullscreen,
     maxHeight,
     pin = true,
-    mode = "fixed",
+    mode = "push",
     children,
     placement = "right",
     resize,
@@ -102,7 +97,8 @@ export const DraggablePanel = memo<DraggablePanelProps>(
     const isVertical = placement === "top" || placement === "bottom"
     const [isPending, startTransition] = useTransition()
 
-    // Use ref for hover timeout to avoid memory leaks
+    // Preserve the existing pin interaction implementation for consumers that
+    // opt into it. AppShell leaves this pinned so overlay panels stay open.
     const hoverTimeoutRef = useRef<any>(undefined)
 
     const cssVariables = useMemo<Record<string, string>>(
@@ -136,17 +132,15 @@ export const DraggablePanel = memo<DraggablePanelProps>(
 
     const [state, dispatch] = useReducer(draggablePanelReducer, initialState)
 
-    // Auto-expand on hover if not pinned with optimized transition
+    // Existing hover-driven expansion behaviour for unpinned consumers.
     useEffect(() => {
       if (pin) return
 
-      // Clear previous timeout
       if (hoverTimeoutRef.current) {
         clearTimeout(hoverTimeoutRef.current)
       }
 
       if (!isExpand) {
-        // Delay collapse
         hoverTimeoutRef.current = setTimeout(() => {
           startTransition(() => {
             setIsExpand(false)
@@ -159,7 +153,6 @@ export const DraggablePanel = memo<DraggablePanelProps>(
       }
     }, [pin, isExpand])
 
-    // Cleanup timeout on unmount
     useEffect(() => {
       return () => {
         if (hoverTimeoutRef.current) {

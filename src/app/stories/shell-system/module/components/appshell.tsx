@@ -3,6 +3,7 @@ import React from "react"
 import { Flexbox } from "react-layout-kit"
 import { Button, HStack, Flex, IconButton, Text } from "@chakra-ui/react"
 import { LuFolder as IconFolder, LuFolderOpen as IconFolderOpen } from "react-icons/lu"
+import { MdCenterFocusStrong as IconPush, MdOutlineCenterFocusStrong as IconOverlay } from "react-icons/md"
 import { DraggablePanel } from "./draggable-panel"
 import { useAppShell } from "../providers"
 
@@ -12,11 +13,19 @@ export function AppShell() {
     expandLeftPanel,
     expandRightPanel,
     expandBottomPanel,
-    pinLeftPanel,
-    pinRightPanel,
-    pinBottomPanel
+    setLeftPanelExpanded,
+    setRightPanelExpanded,
+    setBottomPanelExpanded,
+    toggleLeftPanelMode,
+    toggleRightPanelMode,
+    toggleBottomPanelMode,
+    isLeftPanelPush,
+    isLeftPanelOverlay,
+    isRightPanelPush,
+    isRightPanelOverlay,
+    isBottomPanelPush,
+    isBottomPanelOverlay,
   } = useAppShell()
-
 
   return (
     <Flexbox data-test-id="shell-root" direction={"vertical"} height={"100%"} style={{ position: "relative" }} width={"100%"}>
@@ -45,8 +54,8 @@ export function AppShell() {
           <Button onClick={expandLeftPanel} size="xs" variant={appShellConfig.leftPanel.isExpanded ? "subtle" : "ghost"}>
             {appShellConfig.leftPanel.isExpanded ? <IconFolderOpen /> : <IconFolder />} Left Expand
           </Button>
-          <Button onClick={pinLeftPanel} size="xs" variant={appShellConfig.leftPanel.isPinned ? "subtle" : "ghost"}>
-            {appShellConfig.leftPanel.isPinned ? <IconFolderOpen /> : <IconFolder />} Left Pin
+          <Button onClick={toggleLeftPanelMode} size="xs" variant={isLeftPanelPush ? "subtle" : "ghost"}>
+            {isLeftPanelPush ? <IconPush /> : <IconOverlay />} Left {isLeftPanelPush ? "Push" : "Overlay"}
           </Button>
         </Flex>
         {/* Header - center */}
@@ -66,8 +75,8 @@ export function AppShell() {
           <Button onClick={expandBottomPanel} size="xs" variant={appShellConfig.bottomPanel.isExpanded ? "subtle" : "ghost"}>
             {appShellConfig.bottomPanel.isExpanded ? <IconFolderOpen /> : <IconFolder />} Bottom Panel
           </Button>
-          <Button onClick={pinBottomPanel} size="xs" variant={appShellConfig.bottomPanel.isPinned ? "subtle" : "ghost"}>
-            {appShellConfig.bottomPanel.isPinned ? <IconFolderOpen /> : <IconFolder />} Bottom Pin
+          <Button onClick={toggleBottomPanelMode} size="xs" variant={isBottomPanelPush ? "subtle" : "ghost"}>
+            {isBottomPanelPush ? <IconPush /> : <IconOverlay />} Bottom {isBottomPanelPush ? "Push" : "Overlay"}
           </Button>
         </Flex>
 
@@ -83,8 +92,8 @@ export function AppShell() {
           <Button onClick={expandRightPanel} size="xs" variant={appShellConfig.rightPanel.isExpanded ? "subtle" : "ghost"}>
             {appShellConfig.rightPanel.isExpanded ? <IconFolderOpen /> : <IconFolder />} Right Expand
           </Button>
-          <Button onClick={pinRightPanel} size="xs" variant={appShellConfig.rightPanel.isPinned ? "subtle" : "ghost"}>
-            {appShellConfig.rightPanel.isPinned ? <IconFolderOpen /> : <IconFolder />} Right Pin
+          <Button onClick={toggleRightPanelMode} size="xs" variant={isRightPanelPush ? "subtle" : "ghost"}>
+            {isRightPanelPush ? <IconPush /> : <IconOverlay />} Right {isRightPanelPush ? "Push" : "Overlay"}
           </Button>
         </Flex>
       </Flex>
@@ -165,24 +174,24 @@ export function AppShell() {
         <DraggablePanel
           data-test-id="shell-left-sidepanel"
           expand={appShellConfig.leftPanel.isExpanded}
-          mode={appShellConfig.leftPanel.isPinned ? "fixed" : "float"}
+          mode={appShellConfig.leftPanel.mode}
           css={
-            !appShellConfig.leftPanel.isPinned && {
+            isLeftPanelOverlay && {
               left: "50px",
             }
           }
           showHandleHighlight={true}
-          pin={appShellConfig.leftPanel.isPinned}
+          pin
           placement="left"
-          onExpandChange={expandLeftPanel}
+          onExpandChange={setLeftPanelExpanded}
         >
           <DraggablePanel.Container style={{ flex: 1 }}>
             <DraggablePanel.Header
               data-test-id="shell-left-sidepanel-header"
-              pin={appShellConfig.leftPanel.isPinned}
+              mode={appShellConfig.leftPanel.mode}
               position="left"
-              setExpand={expandLeftPanel}
-              setPin={pinLeftPanel}
+              setExpand={setLeftPanelExpanded}
+              setMode={toggleLeftPanelMode}
               title="Header Left"
             />
             <DraggablePanel.Body data-test-id="shell-left-sidepanel-body">DraggablePanel Left DraggablePanel Left DraggablePanel Left DraggablePanel Left DraggablePanel Left </DraggablePanel.Body>
@@ -206,14 +215,14 @@ export function AppShell() {
           </Flexbox>
           <DraggablePanel
             showHandleHighlight={true}
+            pin
             expand={appShellConfig.bottomPanel.isExpanded}
-            mode={appShellConfig.bottomPanel.isPinned ? "fixed" : "float"}
-            pin={appShellConfig.bottomPanel.isPinned}
+            mode={appShellConfig.bottomPanel.mode}
             placement="bottom"
-            onExpandChange={expandBottomPanel}
+            onExpandChange={setBottomPanelExpanded}
           >
             <DraggablePanel.Container style={{ flex: 1 }}>
-              <DraggablePanel.Header pin={appShellConfig.bottomPanel.isPinned} position="right" setExpand={expandBottomPanel} setPin={pinBottomPanel} title="Header Bottom" />
+              <DraggablePanel.Header mode={appShellConfig.bottomPanel.mode} position="right" setExpand={setBottomPanelExpanded} setMode={toggleBottomPanelMode} title="Header Bottom" />
               <DraggablePanel.Body>
                 DraggablePanel Bottom DraggablePanel Bottom DraggablePanel Bottom DraggablePanel Bottom DraggablePanel Bottom DraggablePanel Bottom DraggablePanel Bottom DraggablePanel Bottom
                 DraggablePanel Bottom DraggablePanel Bottom DraggablePanel Bottom DraggablePanel Bottom DraggablePanel Bottom DraggablePanel Bottom DraggablePanel Bottom DraggablePanel Bottom
@@ -227,19 +236,19 @@ export function AppShell() {
         {/* right draggable panel */}
         <DraggablePanel
           showHandleHighlight={true}
+          pin
           expand={appShellConfig.rightPanel.isExpanded}
-          mode={appShellConfig.rightPanel.isPinned ? "fixed" : "float"}
-          pin={appShellConfig.rightPanel.isPinned}
+          mode={appShellConfig.rightPanel.mode}
           css={
-            !appShellConfig.rightPanel.isPinned && {
+            isRightPanelOverlay && {
               right: "50px",
             }
           }
           placement="right"
-          onExpandChange={expandRightPanel}
+          onExpandChange={setRightPanelExpanded}
         >
           <DraggablePanel.Container style={{ flex: 1 }}>
-            <DraggablePanel.Header pin={appShellConfig.rightPanel.isPinned} position="right" setExpand={expandRightPanel} setPin={pinRightPanel} title="Header Right" />
+            <DraggablePanel.Header mode={appShellConfig.rightPanel.mode} position="right" setExpand={setRightPanelExpanded} setMode={toggleRightPanelMode} title="Header Right" />
             <DraggablePanel.Body>DraggablePanel Right</DraggablePanel.Body>
             <DraggablePanel.Footer>Footer Right</DraggablePanel.Footer>
           </DraggablePanel.Container>
@@ -367,4 +376,3 @@ export function AppShell() {
     </Flexbox>
   )
 }
-

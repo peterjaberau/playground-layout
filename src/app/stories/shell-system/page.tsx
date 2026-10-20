@@ -10,16 +10,16 @@ export default function Page() {
         leftSidebar: {},
         leftPanel: {
           isExpanded: true,
-          isPinned: true,
+          mode: "push",
         },
         rightPanel: {
           isExpanded: true,
-          isPinned: true,
+          mode: "push",
         },
         rightSidebar: {},
         bottomPanel: {
           isExpanded: true,
-          isPinned: true,
+          mode: "push",
         },
         statusBar: {},
       }}

@@ -1,6 +1,5 @@
 import { assign, setup } from "xstate"
 
-
 export const appshellMachine = setup({
   types: {
     context: {} as any,
@@ -16,14 +15,23 @@ export const appshellMachine = setup({
     togglePanelExpensionBottom: assign(({ context, event, self }) => {
       context.config.bottomPanel.isExpanded = !context.config.bottomPanel.isExpanded
     }),
-    togglePanelPinLeft: assign(({ context, event, self }) => {
-      context.config.leftPanel.isPinned = !context.config.leftPanel.isPinned
+    setPanelExpansionLeft: assign(({ context, event }: any) => {
+      context.config.leftPanel.isExpanded = event.isExpanded
     }),
-    togglePanelPinRight: assign(({ context, event, self }) => {
-      context.config.rightPanel.isPinned = !context.config.rightPanel.isPinned
+    setPanelExpansionRight: assign(({ context, event }: any) => {
+      context.config.rightPanel.isExpanded = event.isExpanded
     }),
-    togglePanelPinBottom: assign(({ context, event, self }) => {
-      context.config.bottomPanel.isPinned = !context.config.bottomPanel.isPinned
+    setPanelExpansionBottom: assign(({ context, event }: any) => {
+      context.config.bottomPanel.isExpanded = event.isExpanded
+    }),
+    togglePanelModeLeft: assign(({ context }) => {
+      context.config.leftPanel.mode = context.config.leftPanel.mode === "push" ? "overlay" : "push"
+    }),
+    togglePanelModeRight: assign(({ context }) => {
+      context.config.rightPanel.mode = context.config.rightPanel.mode === "push" ? "overlay" : "push"
+    }),
+    togglePanelModeBottom: assign(({ context }) => {
+      context.config.bottomPanel.mode = context.config.bottomPanel.mode === "push" ? "overlay" : "push"
     }),
   },
 
@@ -49,19 +57,26 @@ export const appshellMachine = setup({
         TOGGLE_PANEL_EXPENSION_BOTTOM: {
           actions: ["togglePanelExpensionBottom"],
         },
+        SET_PANEL_EXPANSION_LEFT: {
+          actions: ["setPanelExpansionLeft"],
+        },
+        SET_PANEL_EXPANSION_RIGHT: {
+          actions: ["setPanelExpansionRight"],
+        },
+        SET_PANEL_EXPANSION_BOTTOM: {
+          actions: ["setPanelExpansionBottom"],
+        },
 
-        TOGGLE_PANEL_PIN_LEFT: {
-          actions: ["togglePanelPinLeft"],
+        TOGGLE_PANEL_MODE_LEFT: {
+          actions: ["togglePanelModeLeft"],
         },
-        TOGGLE_PANEL_PIN_RIGHT: {
-          actions: ["togglePanelPinRight"],
+        TOGGLE_PANEL_MODE_RIGHT: {
+          actions: ["togglePanelModeRight"],
         },
-        TOGGLE_PANEL_PIN_BOTTOM: {
-          actions: ["togglePanelPinBottom"],
+        TOGGLE_PANEL_MODE_BOTTOM: {
+          actions: ["togglePanelModeBottom"],
         },
       },
     },
   },
 })
-
-

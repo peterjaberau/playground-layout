@@ -1,13 +1,7 @@
 import type { NumberSize, Size } from "re-resizable"
 import type { CSSProperties, HTMLAttributes } from "react"
 import type { Props as RndProps } from "react-rnd"
-import type {
-  ComponentType,
-  ForwardRefExoticComponent,
-  PropsWithoutRef,
-  RefAttributes,
-} from "react";
-
+import type { ComponentType, ForwardRefExoticComponent, PropsWithoutRef, RefAttributes } from "react"
 
 export type DivProps = HTMLAttributes<HTMLDivElement>
 
@@ -30,10 +24,18 @@ export interface DraggablePanelProps extends DivProps {
   maxWidth?: number
   minHeight?: number
   minWidth?: number
-  mode?: "fixed" | "float"
+  /**
+   * `push` participates in layout flow; `overlay` is positioned above content.
+   * @default "push"
+   */
+  mode?: "push" | "overlay"
   onExpandChange?: (expand: boolean) => void
   onSizeChange?: (delta: NumberSize, size?: Size) => void
   onSizeDragging?: (delta: NumberSize, size?: Size) => void
+  /**
+   * Preserves the panel's existing pinned interaction: when false, the panel
+   * uses its hover-driven expansion behaviour.
+   */
   pin?: boolean
   placement: PlacementType
   resize?: RndProps["enableResizing"]
@@ -48,15 +50,15 @@ export interface DraggablePanelProps extends DivProps {
   styles?: {
     content?: CSSProperties
     handle?: CSSProperties
-  },
+  }
   css?: any
 }
 
 export interface DraggablePanelHeaderProps extends Omit<DivProps, "children"> {
-  pin?: boolean
+  mode?: "push" | "overlay"
   position?: "left" | "right"
   setExpand?: (expand: boolean) => void
-  setPin?: (pin: boolean) => void
+  setMode?: (mode: "push" | "overlay") => void
   title?: string
   [key: string]: any
 }
@@ -71,9 +73,7 @@ export type DraggablePanelBodyComponent = ComponentType<DraggablePanelBodyProps>
 export type DraggablePanelHeaderComponent = ComponentType<DraggablePanelHeaderProps>
 export type DraggablePanelFooterComponent = ComponentType<DraggablePanelFooterProps>
 export type DraggablePanelContainerComponent = ComponentType<DraggablePanelContainerProps>
-export type DraggablePanelParentComponent = ForwardRefExoticComponent<
-  PropsWithoutRef<DraggablePanelProps> & RefAttributes<HTMLDivElement>
->
+export type DraggablePanelParentComponent = ForwardRefExoticComponent<PropsWithoutRef<DraggablePanelProps> & RefAttributes<HTMLDivElement>>
 export type DraggablePanelComponent = DraggablePanelParentComponent & {
   Body: DraggablePanelBodyComponent
   Container: DraggablePanelContainerComponent
@@ -81,11 +81,7 @@ export type DraggablePanelComponent = DraggablePanelParentComponent & {
   Header: DraggablePanelHeaderComponent
 }
 
-
-export type DraggablePanelAction =
-  | { type: "START_RESIZE" }
-  | { type: "STOP_RESIZE" }
-  | { payload: boolean; type: "SET_SHOW_EXPAND" }
+export type DraggablePanelAction = { type: "START_RESIZE" } | { type: "STOP_RESIZE" } | { payload: boolean; type: "SET_SHOW_EXPAND" }
 
 // State reducer for better state management
 export interface DraggablePanelState {

@@ -14,10 +14,20 @@ export function useAppShell() {
   const expandLeftPanel = () => sendToAppShell({ type: "TOGGLE_PANEL_EXPENSION_LEFT" })
   const expandRightPanel = () => sendToAppShell({ type: "TOGGLE_PANEL_EXPENSION_RIGHT" })
   const expandBottomPanel = () => sendToAppShell({ type: "TOGGLE_PANEL_EXPENSION_BOTTOM" })
+  const setLeftPanelExpanded = (isExpanded: boolean) => sendToAppShell({ type: "SET_PANEL_EXPANSION_LEFT", isExpanded })
+  const setRightPanelExpanded = (isExpanded: boolean) => sendToAppShell({ type: "SET_PANEL_EXPANSION_RIGHT", isExpanded })
+  const setBottomPanelExpanded = (isExpanded: boolean) => sendToAppShell({ type: "SET_PANEL_EXPANSION_BOTTOM", isExpanded })
 
-  const pinLeftPanel = () => sendToAppShell({ type: "TOGGLE_PANEL_PIN_LEFT" })
-  const pinRightPanel = () => sendToAppShell({ type: "TOGGLE_PANEL_PIN_RIGHT" })
-  const pinBottomPanel = () => sendToAppShell({ type: "TOGGLE_PANEL_PIN_BOTTOM" })
+  const toggleLeftPanelMode = () => sendToAppShell({ type: "TOGGLE_PANEL_MODE_LEFT" })
+  const toggleRightPanelMode = () => sendToAppShell({ type: "TOGGLE_PANEL_MODE_RIGHT" })
+  const toggleBottomPanelMode = () => sendToAppShell({ type: "TOGGLE_PANEL_MODE_BOTTOM" })
+
+  const isLeftPanelPush = appShellConfig.leftPanel.mode === "push"
+  const isLeftPanelOverlay = appShellConfig.leftPanel.mode === "overlay"
+  const isRightPanelPush = appShellConfig.rightPanel.mode === "push"
+  const isRightPanelOverlay = appShellConfig.rightPanel.mode === "overlay"
+  const isBottomPanelPush = appShellConfig.bottomPanel.mode === "push"
+  const isBottomPanelOverlay = appShellConfig.bottomPanel.mode === "overlay"
 
   return {
     appShellId,
@@ -30,8 +40,17 @@ export function useAppShell() {
     expandLeftPanel,
     expandRightPanel,
     expandBottomPanel,
-    pinLeftPanel,
-    pinRightPanel,
-    pinBottomPanel,
+    setLeftPanelExpanded,
+    setRightPanelExpanded,
+    setBottomPanelExpanded,
+    toggleLeftPanelMode,
+    toggleRightPanelMode,
+    toggleBottomPanelMode,
+    isLeftPanelPush,
+    isLeftPanelOverlay,
+    isRightPanelPush,
+    isRightPanelOverlay,
+    isBottomPanelPush,
+    isBottomPanelOverlay,
   }
 }

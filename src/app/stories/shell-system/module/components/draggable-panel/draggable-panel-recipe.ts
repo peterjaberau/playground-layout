@@ -85,15 +85,15 @@ export const draggablePanelRecipe = defineSlotRecipe({
     },
   },
   variants: {
-    // Controls root positioning: fixed panels sit in normal flow; float panels
-    // are absolutely positioned over the content area.
+    // Push panels sit in normal flow and resize the surrounding layout; overlay
+    // panels are absolutely positioned over the content area.
     mode: {
-      fixed: {
+      push: {
         root: {
           position: "relative",
         },
       },
-      float: {
+      overlay: {
         root: {
           position: "absolute",
           zIndex: 200,
@@ -164,11 +164,6 @@ export const draggablePanelRecipe = defineSlotRecipe({
       },
     },
 
-    pin: {
-      true: {},
-      false: {},
-    },
-
     expand: {
       true: {},
       false: {},
@@ -211,11 +206,11 @@ export const draggablePanelRecipe = defineSlotRecipe({
   },
 
   compoundVariants: [
-    // ── Float positions ────────────────────────────────────────────────────
-    // When mode=float the root is absolutely positioned; these variants add
+    // ── Overlay positions ──────────────────────────────────────────────────
+    // When mode=overlay the root is absolutely positioned; these variants add
     // the edge-anchoring so it hugs the correct side of the container.
     {
-      mode: "float",
+      mode: "overlay",
       placement: "bottom",
       css: {
         root: {
@@ -226,7 +221,7 @@ export const draggablePanelRecipe = defineSlotRecipe({
       },
     },
     {
-      mode: "float",
+      mode: "overlay",
       placement: "top",
       css: {
         root: {
@@ -237,7 +232,7 @@ export const draggablePanelRecipe = defineSlotRecipe({
       },
     },
     {
-      mode: "float",
+      mode: "overlay",
       placement: "left",
       css: {
         root: {
@@ -248,7 +243,7 @@ export const draggablePanelRecipe = defineSlotRecipe({
       },
     },
     {
-      mode: "float",
+      mode: "overlay",
       placement: "right",
       css: {
         root: {
@@ -341,11 +336,10 @@ export const draggablePanelRecipe = defineSlotRecipe({
   ],
 
   defaultVariants: {
-    mode: "fixed",
+    mode: "push",
     fullscreen: false,
     placement: "right",
     position: "left",
-    pin: true,
     expand: true,
     showBorder: true,
     showHandleHighlight: false,
