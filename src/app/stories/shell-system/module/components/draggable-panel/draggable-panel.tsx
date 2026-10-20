@@ -15,7 +15,7 @@ import { IconButton, chakra, useSlotRecipe } from "@chakra-ui/react"
 import { LuPanelLeft as PanelLeft, LuPin as Pin, LuPinOff as PinOff } from "react-icons/lu"
 
 
-import { draggablePanelRecipe } from "../../styles"
+import { draggablePanelRecipe } from "./draggable-panel-recipe"
 
 export const DraggablePanelHeader = memo<DraggablePanelHeaderProps>((props) => {
   const { pin, setPin, setExpand, title, position = "left", ...rest } = props
