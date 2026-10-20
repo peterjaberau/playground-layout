@@ -1,35 +1,50 @@
 "use client"
 
-import React, { memo, useCallback, useMemo, useReducer } from "react"
-import useControlledState from "use-merge-value"
+import React, { memo, useCallback, useEffect, useMemo } from "react"
 import isEqual from "fast-deep-equal"
 import { Resizable } from "re-resizable"
 
-import { reversePlacement, draggablePanelReducer } from "./utils"
+import { reversePlacement } from "./utils"
 
 import type { Enable, NumberSize, Size } from "re-resizable"
-import { DraggablePanelProps, DraggablePanelHeaderProps, DraggablePanelState } from "./types"
+import { DraggablePanelProps, DraggablePanelHeaderProps } from "./types"
 
 import { IconButton, chakra, useSlotRecipe } from "@chakra-ui/react"
 import { LuPanelLeft as PanelLeft, LuPanelRight as PanelRight, LuPanelBottom as PanelBottom } from "react-icons/lu"
 import { MdCenterFocusStrong as PushModeIcon, MdOutlineCenterFocusStrong as OverlayModeIcon } from "react-icons/md"
 
 import { draggablePanelRecipe } from "./draggable-panel-recipe"
+import { DraggablePanelProvider } from "./draggable-panel-provider"
+import { useDraggablePanel } from "./draggable-panel-selector"
 
 export const DraggablePanelHeader = memo<DraggablePanelHeaderProps>((props) => {
-  const { mode = "push", panelPlacement = "left", setMode, setExpand, title, ...rest } = props
+  const { title, ...rest } = props
+  const { mode, placement, setExpanded, setMode } = useDraggablePanel()
 
   const recipe = useSlotRecipe({ recipe: draggablePanelRecipe })
   const styles = recipe({ mode })
 
-  const ExpandIcon = panelPlacement === "right" ? PanelRight : panelPlacement === "bottom" ? PanelBottom : PanelLeft
+  const ExpandIcon = placement === "right" ? PanelRight : placement === "bottom" ? PanelBottom : PanelLeft
   const expandIcon = (
-    <IconButton size="xs" variant={"ghost"} onClick={() => setExpand?.(false)}>
+    <IconButton
+      size="xs"
+      variant={"ghost"}
+      onClick={() => {
+        setExpanded(false)
+      }}
+    >
       <ExpandIcon />
     </IconButton>
   )
   const modeIcon = (
-    <IconButton onClick={() => setMode?.(mode === "push" ? "overlay" : "push")} size={"xs"} variant={mode === "push" ? "subtle" : "ghost"}>
+    <IconButton
+      onClick={() => {
+        const nextMode = mode === "push" ? "overlay" : "push"
+        setMode(nextMode)
+      }}
+      size={"xs"}
+      variant={mode === "push" ? "subtle" : "ghost"}
+    >
       {mode === "push" ? <PushModeIcon /> : <OverlayModeIcon />}
     </IconButton>
   )
@@ -63,12 +78,12 @@ export const DraggablePanelFooter = memo(({ ...rest }) => {
   return <chakra.div css={styles.footer} {...rest} />
 })
 
-export const DraggablePanel = memo<DraggablePanelProps>(
+const DraggablePanelContent = memo<DraggablePanelProps>(
   ({
     headerHeight = 0,
     fullscreen,
     maxHeight,
-    mode = "push",
+    mode: controlledMode = "push",
     children,
     placement = "right",
     resize,
@@ -84,14 +99,13 @@ export const DraggablePanel = memo<DraggablePanelProps>(
     onSizeDragging,
     expand,
     defaultExpand = true,
-    onExpandChange,
     className,
     destroyOnClose,
     classNames,
     dir,
     css,
   }) => {
-    const isVertical = placement === "top" || placement === "bottom"
+    const { isExpanded, isResizing, isVertical, mode, syncExpanded, syncMode, startResize, stopResize } = useDraggablePanel()
     const cssVariables = useMemo<Record<string, string>>(
       () => ({
         "--draggable-panel-bg": backgroundColor || "",
@@ -100,28 +114,25 @@ export const DraggablePanel = memo<DraggablePanelProps>(
       [backgroundColor, headerHeight],
     )
 
-    const [isExpand, setIsExpand] = useControlledState(defaultExpand, {
-      onChange: onExpandChange,
-      value: expand,
-    } as any)
+    useEffect(() => {
+      syncMode(controlledMode)
+    }, [controlledMode, syncMode])
+
+    useEffect(() => {
+      if (expand !== undefined) syncExpanded(expand)
+    }, [expand, syncExpanded])
 
     const recipe = useSlotRecipe({ recipe: draggablePanelRecipe })
     const stylesFromRecipe = recipe({
       mode,
       placement,
-      expand: isExpand,
+      expand: isExpanded,
       showBorder,
       showHandleHighlight,
       fullscreen,
     })
 
-    const initialState: DraggablePanelState = {
-      isResizing: false,
-    }
-
-    const [state, dispatch] = useReducer(draggablePanelReducer, initialState)
-
-    const canResizing = resize !== false && isExpand
+    const canResizing = resize !== false && isExpanded
 
     // Configure resizing handles
     const resizing = useMemo(
@@ -158,7 +169,7 @@ export const DraggablePanel = memo<DraggablePanelProps>(
 
     // Determine appropriate size props based on expand state
     const sizeProps: any = useMemo(() => {
-      if (!isExpand) {
+      if (!isExpanded) {
         return isVertical ? { minHeight: 0, size: { height: 0 } } : { minWidth: 0, size: { width: 0 } }
       }
 
@@ -170,7 +181,7 @@ export const DraggablePanel = memo<DraggablePanelProps>(
         minWidth: typeof minWidth === "number" ? Math.max(minWidth, 0) : minWidth,
         size: size as Size,
       }
-    }, [isExpand, isVertical, defaultSize, maxHeight, maxWidth, minHeight, minWidth, size])
+    }, [isExpanded, isVertical, defaultSize, maxHeight, maxWidth, minHeight, minWidth, size])
 
     // Handle resize events with memoization
     const handleResize = useCallback(
@@ -184,18 +195,18 @@ export const DraggablePanel = memo<DraggablePanelProps>(
     )
 
     const handleResizeStart = useCallback(() => {
-      dispatch({ type: "START_RESIZE" })
-    }, [])
+      startResize()
+    }, [startResize])
 
     const handleResizeStop = useCallback(
       (_event: unknown, _direction: unknown, reference_: HTMLElement, delta: NumberSize) => {
-        dispatch({ type: "STOP_RESIZE" })
+        stopResize()
         onSizeChange?.(delta, {
           height: reference_.style.height,
           width: reference_.style.width,
         })
       },
-      [onSizeChange],
+      [onSizeChange, stopResize],
     )
 
     // Main panel content
@@ -203,7 +214,7 @@ export const DraggablePanel = memo<DraggablePanelProps>(
       () => (
         <Resizable
           data-part={"draggable-panel-inner"}
-          data-transition-resizing={state.isResizing}
+          data-transition-resizing={isResizing}
           {...sizeProps}
           className={classNames?.content}
           enable={canResizing ? (resizing as Enable) : undefined}
@@ -217,7 +228,7 @@ export const DraggablePanel = memo<DraggablePanelProps>(
           style={{
             ...cssVariables,
             ...(stylesFromRecipe.panel as React.CSSProperties),
-            transition: state.isResizing ? "unset" : undefined,
+            transition: isResizing ? "unset" : undefined,
           }}
           onResize={handleResize}
           onResizeStart={handleResizeStart}
@@ -237,7 +248,7 @@ export const DraggablePanel = memo<DraggablePanelProps>(
         handleResize,
         handleResizeStart,
         handleResizeStop,
-        state.isResizing,
+        isResizing,
         children,
       ],
     )
@@ -270,9 +281,27 @@ export const DraggablePanel = memo<DraggablePanelProps>(
           ...css,
         }}
       >
-        {destroyOnClose ? isExpand && inner : inner}
+        {destroyOnClose ? isExpanded && inner : inner}
       </chakra.div>
     )
   },
   isEqual,
 )
+
+export const DraggablePanel = memo<DraggablePanelProps>((props) => {
+  const { defaultExpand = true, expand, mode = "push", placement = "right", onExpandChange, onModeChange } = props
+
+  return (
+    <DraggablePanelProvider
+      initialContext={{
+        isExpanded: expand ?? defaultExpand,
+        mode,
+        placement,
+        ...(onExpandChange && { onExpandChange }),
+        ...(onModeChange && { onModeChange }),
+      }}
+    >
+      <DraggablePanelContent {...props} />
+    </DraggablePanelProvider>
+  )
+}, isEqual)

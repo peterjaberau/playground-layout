@@ -28,6 +28,7 @@ export interface DraggablePanelProps extends DivProps {
    */
   mode?: "push" | "overlay"
   onExpandChange?: (expand: boolean) => void
+  onModeChange?: (mode: "push" | "overlay") => void
   onSizeChange?: (delta: NumberSize, size?: Size) => void
   onSizeDragging?: (delta: NumberSize, size?: Size) => void
   placement: PlacementType
@@ -43,10 +44,6 @@ export interface DraggablePanelProps extends DivProps {
 }
 
 export interface DraggablePanelHeaderProps extends Omit<DivProps, "children"> {
-  mode?: "push" | "overlay"
-  panelPlacement?: PlacementType
-  setExpand?: (expand: boolean) => void
-  setMode?: (mode: "push" | "overlay") => void
   title?: string
   [key: string]: any
 }
@@ -67,11 +64,4 @@ export type DraggablePanelComponent = DraggablePanelParentComponent & {
   Container: DraggablePanelContainerComponent
   Footer: DraggablePanelFooterComponent
   Header: DraggablePanelHeaderComponent
-}
-
-export type DraggablePanelAction = { type: "START_RESIZE" } | { type: "STOP_RESIZE" }
-
-// State reducer for better state management
-export interface DraggablePanelState {
-  isResizing: boolean
 }

@@ -182,16 +182,10 @@ export function AppShell() {
           showHandleHighlight={true}
           placement="left"
           onExpandChange={setLeftPanelExpanded}
+          onModeChange={toggleLeftPanelMode}
         >
           <DraggablePanel.Container style={{ flex: 1 }}>
-            <DraggablePanel.Header
-              data-test-id="shell-left-sidepanel-header"
-              mode={appShellConfig.leftPanel.mode}
-              panelPlacement="left"
-              setExpand={setLeftPanelExpanded}
-              setMode={toggleLeftPanelMode}
-              title="Header Left"
-            />
+            <DraggablePanel.Header data-test-id="shell-left-sidepanel-header" title="Header Left" />
             <DraggablePanel.Body data-test-id="shell-left-sidepanel-body">DraggablePanel Left DraggablePanel Left DraggablePanel Left DraggablePanel Left DraggablePanel Left </DraggablePanel.Body>
             <DraggablePanel.Footer data-test-id="shell-left-sidepanel-footer">Footer Left</DraggablePanel.Footer>
           </DraggablePanel.Container>
@@ -202,9 +196,16 @@ export function AppShell() {
           <Flex flex={1} direction="column" overflow="hidden auto" position="relative" backgroundColor="white" p={1}>
             content
           </Flex>
-          <DraggablePanel showHandleHighlight={true} expand={appShellConfig.bottomPanel.isExpanded} mode={appShellConfig.bottomPanel.mode} placement="bottom" onExpandChange={setBottomPanelExpanded}>
+          <DraggablePanel
+            showHandleHighlight={true}
+            expand={appShellConfig.bottomPanel.isExpanded}
+            mode={appShellConfig.bottomPanel.mode}
+            placement="bottom"
+            onExpandChange={setBottomPanelExpanded}
+            onModeChange={toggleBottomPanelMode}
+          >
             <DraggablePanel.Container style={{ flex: 1 }}>
-              <DraggablePanel.Header mode={appShellConfig.bottomPanel.mode} panelPlacement="bottom" setExpand={setBottomPanelExpanded} setMode={toggleBottomPanelMode} title="Header Bottom" />
+              <DraggablePanel.Header title="Header Bottom" />
               <DraggablePanel.Body>
                 DraggablePanel Bottom DraggablePanel Bottom DraggablePanel Bottom DraggablePanel Bottom DraggablePanel Bottom DraggablePanel Bottom DraggablePanel Bottom DraggablePanel Bottom
                 DraggablePanel Bottom DraggablePanel Bottom DraggablePanel Bottom DraggablePanel Bottom DraggablePanel Bottom DraggablePanel Bottom DraggablePanel Bottom DraggablePanel Bottom
@@ -227,9 +228,10 @@ export function AppShell() {
           }
           placement="right"
           onExpandChange={setRightPanelExpanded}
+          onModeChange={toggleRightPanelMode}
         >
           <DraggablePanel.Container style={{ flex: 1 }}>
-            <DraggablePanel.Header mode={appShellConfig.rightPanel.mode} panelPlacement="right" setExpand={setRightPanelExpanded} setMode={toggleRightPanelMode} title="Header Right" />
+            <DraggablePanel.Header title="Header Right" />
             <DraggablePanel.Body>DraggablePanel Right</DraggablePanel.Body>
             <DraggablePanel.Footer>Footer Right</DraggablePanel.Footer>
           </DraggablePanel.Container>
