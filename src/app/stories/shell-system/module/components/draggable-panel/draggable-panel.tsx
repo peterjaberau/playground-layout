@@ -1,6 +1,6 @@
 "use client"
 
-import React, { memo, useCallback, useEffect, useMemo, useReducer, useRef, useTransition } from "react"
+import React, { memo, useCallback, useMemo, useReducer } from "react"
 import useControlledState from "use-merge-value"
 import isEqual from "fast-deep-equal"
 import { Resizable } from "re-resizable"
@@ -17,15 +17,15 @@ import { MdCenterFocusStrong as PushModeIcon, MdOutlineCenterFocusStrong as Over
 import { draggablePanelRecipe } from "./draggable-panel-recipe"
 
 export const DraggablePanelHeader = memo<DraggablePanelHeaderProps>((props) => {
-  const { mode = "push", panelPlacement = "left", setMode, setExpand, title, position = "left", ...rest } = props
+  const { mode = "push", panelPlacement = "left", setMode, setExpand, title, ...rest } = props
 
   const recipe = useSlotRecipe({ recipe: draggablePanelRecipe })
-  const styles = recipe({ mode, position })
+  const styles = recipe({ mode })
 
-  const PanelIcon = panelPlacement === "right" ? PanelRight : panelPlacement === "bottom" ? PanelBottom : PanelLeft
-  const panelIcon = (
+  const ExpandIcon = panelPlacement === "right" ? PanelRight : panelPlacement === "bottom" ? PanelBottom : PanelLeft
+  const expandIcon = (
     <IconButton size="xs" variant={"ghost"} onClick={() => setExpand?.(false)}>
-      <PanelIcon />
+      <ExpandIcon />
     </IconButton>
   )
   const modeIcon = (
@@ -35,9 +35,11 @@ export const DraggablePanelHeader = memo<DraggablePanelHeaderProps>((props) => {
   )
   return (
     <chakra.div data-part={"draggable-panel-header"} css={styles.header} {...rest}>
-      {position === "left" ? panelIcon : modeIcon}
-      {title}
-      {position === "left" ? modeIcon : panelIcon}
+      <chakra.span flex="1">{title}</chakra.span>
+      <chakra.div display="flex" alignItems="center" justifyContent="flex-end" gap="8px">
+        {expandIcon}
+        {modeIcon}
+      </chakra.div>
     </chakra.div>
   )
 })
@@ -66,7 +68,6 @@ export const DraggablePanel = memo<DraggablePanelProps>(
     headerHeight = 0,
     fullscreen,
     maxHeight,
-    pin = true,
     mode = "push",
     children,
     placement = "right",
@@ -91,12 +92,6 @@ export const DraggablePanel = memo<DraggablePanelProps>(
     css,
   }) => {
     const isVertical = placement === "top" || placement === "bottom"
-    const [isPending, startTransition] = useTransition()
-
-    // Preserve the existing pin interaction implementation for consumers that
-    // opt into it. AppShell leaves this pinned so overlay panels stay open.
-    const hoverTimeoutRef = useRef<any>(undefined)
-
     const cssVariables = useMemo<Record<string, string>>(
       () => ({
         "--draggable-panel-bg": backgroundColor || "",
@@ -125,35 +120,6 @@ export const DraggablePanel = memo<DraggablePanelProps>(
     }
 
     const [state, dispatch] = useReducer(draggablePanelReducer, initialState)
-
-    // Existing hover-driven expansion behaviour for unpinned consumers.
-    useEffect(() => {
-      if (pin) return
-
-      if (hoverTimeoutRef.current) {
-        clearTimeout(hoverTimeoutRef.current)
-      }
-
-      if (!isExpand) {
-        hoverTimeoutRef.current = setTimeout(() => {
-          startTransition(() => {
-            setIsExpand(false)
-          })
-        }, 150)
-      } else {
-        startTransition(() => {
-          setIsExpand(true)
-        })
-      }
-    }, [pin, isExpand])
-
-    useEffect(() => {
-      return () => {
-        if (hoverTimeoutRef.current) {
-          clearTimeout(hoverTimeoutRef.current)
-        }
-      }
-    }, [])
 
     const canResizing = resize !== false && isExpand
 
@@ -237,7 +203,6 @@ export const DraggablePanel = memo<DraggablePanelProps>(
       () => (
         <Resizable
           data-part={"draggable-panel-inner"}
-          data-transition-pending={isPending}
           data-transition-resizing={state.isResizing}
           {...sizeProps}
           className={classNames?.content}
@@ -252,7 +217,6 @@ export const DraggablePanel = memo<DraggablePanelProps>(
           style={{
             ...cssVariables,
             ...(stylesFromRecipe.panel as React.CSSProperties),
-            opacity: isPending ? 0.95 : 1,
             transition: state.isResizing ? "unset" : undefined,
           }}
           onResize={handleResize}
@@ -274,7 +238,6 @@ export const DraggablePanel = memo<DraggablePanelProps>(
         handleResizeStart,
         handleResizeStop,
         state.isResizing,
-        isPending,
         children,
       ],
     )

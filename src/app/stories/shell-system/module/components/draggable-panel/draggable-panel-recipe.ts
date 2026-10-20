@@ -169,15 +169,6 @@ export const draggablePanelRecipe = defineSlotRecipe({
       false: {},
     },
 
-    // position is consumed by sub-components such as DraggablePanelHeader to
-    // determine icon layout (panel-icon left vs right).
-    position: {
-      left: {},
-      right: {},
-      top: {},
-      bottom: {},
-    },
-
     showBorder: {
       true: {},
       false: {},
@@ -339,7 +330,6 @@ export const draggablePanelRecipe = defineSlotRecipe({
     mode: "push",
     fullscreen: false,
     placement: "right",
-    position: "left",
     expand: true,
     showBorder: true,
     showHandleHighlight: false,

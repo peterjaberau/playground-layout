@@ -30,11 +30,6 @@ export interface DraggablePanelProps extends DivProps {
   onExpandChange?: (expand: boolean) => void
   onSizeChange?: (delta: NumberSize, size?: Size) => void
   onSizeDragging?: (delta: NumberSize, size?: Size) => void
-  /**
-   * Preserves the panel's existing pinned interaction: when false, the panel
-   * uses its hover-driven expansion behaviour.
-   */
-  pin?: boolean
   placement: PlacementType
   resize?: RndProps["enableResizing"]
   /**
@@ -50,7 +45,6 @@ export interface DraggablePanelProps extends DivProps {
 export interface DraggablePanelHeaderProps extends Omit<DivProps, "children"> {
   mode?: "push" | "overlay"
   panelPlacement?: PlacementType
-  position?: "left" | "right"
   setExpand?: (expand: boolean) => void
   setMode?: (mode: "push" | "overlay") => void
   title?: string
