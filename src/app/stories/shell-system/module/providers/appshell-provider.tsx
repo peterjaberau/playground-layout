@@ -1,11 +1,29 @@
 "use client"
 import React from "react"
 import { createActorContext, useSelector } from "@xstate/react"
-import { appMachine } from "./machines"
-import { config as defaultConfig } from "./config"
+import { appshellMachine } from "../machines"
+
+const defaultConfig = {
+  header: {},
+  leftSidebar: {},
+  leftPanel: {
+    isExpanded: true,
+    isPinned: true,
+  },
+  rightPanel: {
+    isExpanded: true,
+    isPinned: true,
+  },
+  rightSidebar: {},
+  bottomPanel: {
+    isExpanded: true,
+    isPinned: true,
+  },
+  statusBar: {},
+}
 
 
-export const AppShellContext = createActorContext(appMachine)
+export const AppShellContext = createActorContext(appshellMachine)
 
 export const AppShellProvider = (props: any) => {
   const { children, data = null, config, ...rest } = props

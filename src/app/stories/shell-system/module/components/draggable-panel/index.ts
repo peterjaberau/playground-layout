@@ -7,7 +7,6 @@ import {
   DraggablePanelFooter,
   DraggablePanelHeader,
 } from "./draggable-panel"
-export * from "./constants"
 import type { DraggablePanelComponent } from "./types"
 
 export const DraggablePanel = DraggablePanelParent as unknown as DraggablePanelComponent

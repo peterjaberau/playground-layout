@@ -6,7 +6,6 @@ import useControlledState from "use-merge-value"
 import isEqual from "fast-deep-equal"
 import { Resizable } from "re-resizable"
 
-import { DEFAULT_PIN, DEFAULT_EXPAND } from "./constants"
 import { reversePlacement, draggablePanelReducer } from "./utils"
 
 import type { Enable, NumberSize, Size } from "re-resizable"
@@ -16,7 +15,7 @@ import { IconButton, chakra, useSlotRecipe } from "@chakra-ui/react"
 import { LuPanelLeft as PanelLeft, LuPin as Pin, LuPinOff as PinOff } from "react-icons/lu"
 
 
-import { stylesRecipe } from "./recipe"
+import { draggablePanelRecipe } from "../../styles"
 
 export const DraggablePanelHeader = memo<DraggablePanelHeaderProps>((props) => {
   const { pin, setPin, setExpand, title, position = "left", ...rest } = props
@@ -26,7 +25,7 @@ export const DraggablePanelHeader = memo<DraggablePanelHeaderProps>((props) => {
     value: pin,
   } as any)
 
-  const recipe = useSlotRecipe({ recipe: stylesRecipe })
+  const recipe = useSlotRecipe({ recipe: draggablePanelRecipe })
   const styles = recipe({ pin, position })
 
   const panelIcon = (
@@ -49,19 +48,19 @@ export const DraggablePanelHeader = memo<DraggablePanelHeaderProps>((props) => {
 })
 
 export const DraggablePanelBody = memo(({ ...rest }) => {
-  const recipe = useSlotRecipe({ recipe: stylesRecipe })
+  const recipe = useSlotRecipe({ recipe: draggablePanelRecipe })
   const styles = recipe()
   return <chakra.div data-part={"draggable-panel-body"} css={styles.body} {...rest} />
 })
 
 export const DraggablePanelContainer = memo(({ ...rest }: any) => {
-  const recipe = useSlotRecipe({ recipe: stylesRecipe })
+  const recipe = useSlotRecipe({ recipe: draggablePanelRecipe })
   const styles = recipe()
   return <chakra.div data-part={"draggable-panel-container"} css={styles.container} {...rest} />
 })
 
 export const DraggablePanelFooter = memo(({ ...rest }) => {
-  const recipe = useSlotRecipe({ recipe: stylesRecipe })
+  const recipe = useSlotRecipe({ recipe: draggablePanelRecipe })
   const styles = recipe()
 
   return <chakra.div css={styles.footer} {...rest} />
@@ -72,7 +71,7 @@ export const DraggablePanel = memo<DraggablePanelProps>(
     headerHeight = 0,
     fullscreen,
     maxHeight,
-    pin = DEFAULT_PIN,
+    pin = true,
     mode = "fixed",
     children,
     placement = "right",
@@ -89,7 +88,7 @@ export const DraggablePanel = memo<DraggablePanelProps>(
     onSizeChange,
     onSizeDragging,
     expand,
-    defaultExpand = DEFAULT_EXPAND,
+    defaultExpand = true,
     onExpandChange,
     className,
     destroyOnClose,
@@ -119,7 +118,7 @@ export const DraggablePanel = memo<DraggablePanelProps>(
       value: expand,
     } as any)
 
-    const recipe = useSlotRecipe({ recipe: stylesRecipe })
+    const recipe = useSlotRecipe({ recipe: draggablePanelRecipe })
     const stylesFromRecipe = recipe({
       mode,
       placement,
@@ -259,9 +258,7 @@ export const DraggablePanel = memo<DraggablePanelProps>(
           handleComponent={
             canResizing
               ? {
-                  [reversePlacement(placement)]: (
-                    <chakra.div css={stylesFromRecipe.resizeTrigger} />
-                  ),
+                  [reversePlacement(placement)]: <chakra.div css={stylesFromRecipe.resizeTrigger} />,
                 }
               : {}
           }
@@ -321,9 +318,8 @@ export const DraggablePanel = memo<DraggablePanelProps>(
         className={className}
         css={{
           ...stylesFromRecipe.root,
-          ...css
-        }
-      }
+          ...css,
+        }}
       >
         {destroyOnClose ? isExpand && inner : inner}
       </chakra.div>

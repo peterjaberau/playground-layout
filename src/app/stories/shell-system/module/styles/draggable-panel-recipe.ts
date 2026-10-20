@@ -1,6 +1,6 @@
 import { defineSlotRecipe } from "@chakra-ui/react"
 
-export const stylesRecipe = defineSlotRecipe({
+export const draggablePanelRecipe = defineSlotRecipe({
   className: "draggable-panel",
   slots: ["root", "panel", "body", "container", "footer", "header", "handlerIcon", "resizeTrigger"],
   base: {

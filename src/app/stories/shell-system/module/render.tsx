@@ -1,8 +1,7 @@
 "use client"
 
-import { AppShellProvider } from "./providers"
-import { ThemeProvider } from "./components/theme"
-import AppShell from "./components"
+import { AppShellProvider, ThemeProvider } from "./providers"
+import { AppShell } from "./components"
 
 const Render = (props: any) => {
   return (

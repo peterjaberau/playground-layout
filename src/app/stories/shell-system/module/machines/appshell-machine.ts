@@ -1,7 +1,7 @@
 import { assign, setup } from "xstate"
 
 
-export const appMachine = setup({
+export const appshellMachine = setup({
   types: {
     context: {} as any,
     events: {} as any,

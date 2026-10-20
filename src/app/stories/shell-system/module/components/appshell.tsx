@@ -3,10 +3,10 @@ import React from "react"
 import { Flexbox } from "react-layout-kit"
 import { Button, HStack, Flex, IconButton, Text } from "@chakra-ui/react"
 import { LuFolder as IconFolder, LuFolderOpen as IconFolderOpen } from "react-icons/lu"
-import { DraggablePanel } from "#components/draggable-panel"
+import { DraggablePanel } from "./draggable-panel"
 import { useAppShell } from "../providers"
 
-function AppShell() {
+export function AppShell() {
   const {
     appShellConfig,
     expandLeftPanel,
@@ -368,4 +368,3 @@ function AppShell() {
   )
 }
 
-export default AppShell
