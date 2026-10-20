@@ -1,7 +1,6 @@
 "use client"
 import React from "react"
-import { Flexbox } from "react-layout-kit"
-import { Button, HStack, Flex, IconButton, Text } from "@chakra-ui/react"
+import { Button, Flex, IconButton } from "@chakra-ui/react"
 import { LuFolder as IconFolder, LuFolderOpen as IconFolderOpen } from "react-icons/lu"
 import { MdCenterFocusStrong as IconPush, MdOutlineCenterFocusStrong as IconOverlay } from "react-icons/md"
 import { DraggablePanel } from "./draggable-panel"
@@ -28,7 +27,7 @@ export function AppShell() {
   } = useAppShell()
 
   return (
-    <Flexbox data-test-id="shell-root" direction={"vertical"} height={"100%"} style={{ position: "relative" }} width={"100%"}>
+    <Flex data-test-id="shell-root" direction="column" height="100%" position="relative" width="100%">
       {/* Header */}
       <Flex
         data-test-id="shell-header"
@@ -100,7 +99,7 @@ export function AppShell() {
 
       {/* main */}
 
-      <Flexbox data-test-id="shell-main" direction="horizontal" width="100%" height="100%" style={{ maxWidth: "100vw", overflow: "hidden", position: "relative" }}>
+      <Flex data-test-id="shell-main" direction="row" width="100%" height="100%" maxWidth="100vw" overflow="hidden" position="relative">
         {/* Left Sidebar */}
         <Flex
           data-test-id="shell-left-sidebar"
@@ -201,19 +200,10 @@ export function AppShell() {
         </DraggablePanel>
 
         {/* content */}
-        <Flexbox data-test-id="shell-content" flex={1} direction={"vertical"} width={"100%"} height={"100%"} style={{ overflow: "hidden", position: "relative" }}>
-          <Flexbox
-            flex={1}
-            direction={"vertical"}
-            style={{
-              overflow: "hidden auto",
-              position: "relative",
-              backgroundColor: "white",
-              padding: 1,
-            }}
-          >
+        <Flex data-test-id="shell-content" flex={1} direction="column" width="100%" height="100%" overflow="hidden" position="relative">
+          <Flex flex={1} direction="column" overflow="hidden auto" position="relative" backgroundColor="white" p={1}>
             content
-          </Flexbox>
+          </Flex>
           <DraggablePanel
             showHandleHighlight={true}
             pin
@@ -239,7 +229,7 @@ export function AppShell() {
               <DraggablePanel.Footer>Footer Bottom</DraggablePanel.Footer>
             </DraggablePanel.Container>
           </DraggablePanel>
-        </Flexbox>
+        </Flex>
 
         {/* right draggable panel */}
         <DraggablePanel
@@ -330,7 +320,7 @@ export function AppShell() {
             </IconButton>
           </Flex>
         </Flex>
-      </Flexbox>
+      </Flex>
 
       {/* Status Bar */}
       <Flex
@@ -388,6 +378,6 @@ export function AppShell() {
           </Button>
         </Flex>
       </Flex>
-    </Flexbox>
+    </Flex>
   )
 }
