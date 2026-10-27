@@ -6,10 +6,9 @@ export const panelMachine = setup({}).createMachine({
   context: ({ input }: any) => {
     return {
       component: input?.component,
-      defaultOptions: {
-        ...panelOptionDefaults,
-        ...input?.defaultOptions
-      },
+      config: {},
+      dirty: {},
+      value: {},
     }
   },
 })

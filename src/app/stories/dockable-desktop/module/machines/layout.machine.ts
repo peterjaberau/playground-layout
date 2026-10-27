@@ -1,20 +1,14 @@
 import { assign, setup } from "xstate"
+import { panelOptionDefaults } from "../store"
 
 export const layoutMachine = setup({}).createMachine({
   id: "layout",
-  initial: "idle",
   context: ({ input }: any) => {
     return {
-      gridRoot: [],
-      defaultSplitRatio: 0.5,
-      defaultEdgeSplitRatio: 0.2,
+      component: input?.component,
+      config: {},
+      dirty: {},
+      value: {},
     }
-  },
-  states: {
-    idle: {
-      on: {
-        OPEN_PANEL: ["openPanel"]
-      }
-    },
   },
 })

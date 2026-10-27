@@ -5,10 +5,9 @@ export const workspaceMachine = setup({}).createMachine({
   initial: "idle",
   context: ({ input }: any) => {
     return {
-      registry: null, // spawn panelRegister
-      panels: [],
-      defaultSplitRatio: 0.5,
-      defaultEdgeSplitRatio: 0.2,
+      config: {},
+      dirty: {},
+      value: {},
     }
   },
   states: {

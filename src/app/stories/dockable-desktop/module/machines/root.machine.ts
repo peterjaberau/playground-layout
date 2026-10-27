@@ -4,7 +4,9 @@ export const rootMachine = setup({}).createMachine({
   id: "root",
   context: (({ input }: any) => {
     return {
-      workspace: null,
+      config: {},
+      dirty: {},
+      value: {},
     }
 
   })

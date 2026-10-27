@@ -1,0 +1,76 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "plugins"
+  },
+  "paths": {
+    "/plugins": {
+      "get": {
+        "tags": ["Plugin"],
+        "operationId": "listPlugin",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PluginList"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/plugins/{name}": {
+      "tags": ["Plugin"],
+      "operationId": "getPlugin",
+      "responses": {
+        "200": {
+          "description": "OK",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Plugin"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Plugin": {
+        "description": "Plugin schema",
+        "type": "object",
+        "required": ["type", "name"],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string",
+            "enum": ["app", "datasource", "panel", "renderer"]
+          }
+        }
+      },
+      "PluginList": {
+        "type": "object",
+        "required": ["items"],
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "default": {},
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/Plugin"
+                }
+              ]
+            }
+          }
+        }
+      }
+    }
+  }
+}

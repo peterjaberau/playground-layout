@@ -1,0 +1,91 @@
+{
+  "components": {
+    "responses": {},
+    "schemas": {},
+    "securitySchemes": {
+      "api_key": {
+        "in": "header",
+        "name": "Authorization",
+        "type": "apiKey"
+      },
+      "basic": {
+        "scheme": "basic",
+        "type": "http"
+      }
+    }
+  },
+  "info": {
+    "contact": {
+      "email": "",
+      "name": "",
+      "url": ""
+    },
+    "description": "",
+    "title": "",
+    "version": "0.0.1"
+  },
+  "paths": {
+    "/access-control": {},
+    "/access-control/users": {},
+    "/admin": {},
+    "/admin/settings": {},
+    "/admin/stats": {},
+    "/admin/users": {},
+    "/dashboards/home": {},
+    "/dashboards/uid/{uid}": {},
+    "/datasources": {},
+    "/datasources/uid/{uid}": {},
+    "/folders": {},
+    "/folders/uid/{uid}": {},
+    "/library-elements": {},
+    "/library-elements/{library_element_uid}": {},
+    "/query-history": {},
+    "/query-history/{query_history_uid}": {},
+    "/reports": {},
+    "/reports/{id}": {},
+    "/search": {},
+    "/search/sorting": {},
+    "/snapshots": {},
+    "/snapshots/{key}": {},
+    "/user": {},
+    "/users": {},
+    "/users/{user_id}": {}
+  },
+  "security": [
+    {
+      "basic": []
+    },
+    {
+      "api_key": []
+    }
+  ],
+  "servers": [
+    {
+      "url": "/api"
+    }
+  ],
+  "tags": [
+    {
+      "name": "datasources"
+    },
+    {
+      "name": "folders"
+    },
+    {
+      "name": "admin"
+    },
+    {
+      "name": "library_elements"
+    },
+    {
+      "name": "query_history"
+    },
+    {
+      "name": "access_control"
+    },
+    {
+      "name": "reports"
+    }
+  ]
+
+}
