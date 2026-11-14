@@ -1,0 +1,63 @@
+/* the root: a sized box (it has no intrinsic size) */
+.layout {
+    flex: 1;
+    min-height: 0;
+    background: #f4f4f5;
+    color: #18181b;
+    font: 13px/1.4 system-ui, sans-serif;
+}
+
+/* tabsets: rows and tabsets are flex items sized by weight; don't set flex-grow or display */
+.tabset {
+    background: #fff;
+    border: 1px solid #e4e4e7;
+}
+
+/* the tab strip: a min height (see below) */
+[role="tablist"] {
+    display: flex;
+    gap: 2px;
+    min-height: 30px;
+    padding-inline-start: 4px;
+    border-bottom: 1px solid #e4e4e7;
+    overflow: hidden;
+}
+
+/* tabs */
+[role="tab"] {
+    display: flex;
+    align-items: center;
+    padding: 0 12px;
+    cursor: pointer;
+    color: #52525b;
+    user-select: none;
+}
+[role="tab"]:hover { background: #f4f4f5; }
+[role="tab"][data-selected] { color: #18181b; background: #f4f4f5; }
+[role="tab"][data-dragging] { opacity: 0.4; }
+[role="tab"]:focus-visible { outline: 2px solid #2563eb; outline-offset: -2px; }
+
+/* the selected tab of the active tabset */
+[data-active] [role="tab"][data-selected] { box-shadow: inset 0 -2px #2563eb; }
+
+/* panels: the engine owns position, geometry and display */
+[role="tabpanel"] { background: #fff; overflow: auto; }
+
+/* splitters: data-orientation="vertical" is the bar between side by side children */
+[role="separator"] { background: #e4e4e7; }
+[role="separator"][data-orientation="vertical"] { width: 4px; cursor: ew-resize; }
+[role="separator"][data-orientation="horizontal"] { height: 4px; cursor: ns-resize; }
+[role="separator"]:is(:hover, :focus-visible, [data-dragging]) { background: #2563eb; }
+
+/* the drop indicator: above the panels, animated between targets */
+[data-layout-path="/outline"] {
+    z-index: 10;
+    border: 2px solid #2563eb;
+    background: rgb(37 99 235 / 0.15);
+    border-radius: 4px;
+    transition: left 0.15s, top 0.15s, width 0.15s, height 0.15s;
+}
+[data-layout-path="/outline"][data-drop-kind="edge"] { border-style: dashed; }
+
+/* a maximized layout hides the other tabsets itself; mark the maximized one */
+.tabset[data-maximized] { box-shadow: inset 0 0 0 2px #2563eb; }

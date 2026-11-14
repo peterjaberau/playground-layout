@@ -37,6 +37,8 @@
       "~/*": ["./public/*"],
       "#app/*": ["./src/app/*"],
       "#app": ["./src/app"],
+      "#core/*": ["./src/app/open-headers/module/core/*"],
+      "#core": ["./src/app/open-headers/module/core"],
       "#components/*": ["./src/components/*"],
       "#components": ["./src/components"],
       "#ui/*": ["./src/components/ui/*"],
